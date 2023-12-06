@@ -1,0 +1,12 @@
+body{
+    background: url(./images/700321e6b16960cae86e920383f4da0c.jpg);
+    background-size: cover;
+}
+button{
+    border-radius: 8px;
+    background-color: white;
+}
+input{
+    border-radius: 6px;
+    background-color:whitesmoke;
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./weather.css">
+</head>
+<body class="body">
+  <div class=" text-center container my-3 p-3">
+    <h1>weather App</h1>
+    <input id="data" type="text" placeholder="location"><br>
+    <button onclick="placesearch()" type="button" class="button mt-3">search</button>
+  </div>
+  <div class="container text-center">
+    <button onclick="searchLocation()" type="button">Turn on location services</button>
+  </div>
+  <div id="temp" class=" my-3 container w-25 p-3">  
+  </div>
+  <div id="fl" class="my-3 container w-25 p-3"></div>
+  <div id="hum" class=" my-3 container w-25 p-3"></div>
+  <div id="airP" class=" my-3 container w-25 p-3"></div>
+  <div id="maxT" class=" my-3 container w-25 p-3"></div>
+
+</body>
+<script>
+  function placesearch(){
+    cityName=data.value
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=5b4bee0ba241d092159faf007e166080`)
+    .then(response=>response.json())
+    .then(out=>displayData(out))}
+    function displayData(data){
+      temperature=parseInt(data.main["temp"]-273.15)
+      feels_like=parseInt(data.main["feels_like"]-273.15)
+      humidity=parseInt(data.main["humidity"])
+      air=(data.main["pressure"])
+      max=parseInt(data.main["temp_max"]-273.15)
+      
+      temp.innerHTML=`<div>
+        <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Temperature</h5>
+    <p class="card-text">${temperature+"\u00B0"}</p>
+  </div>
+</div>`
+      fl.innerHTML=`<div>
+        <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">feels like</h5>
+    <p class="card-text">${feels_like+"\u00B0"}</p>
+  </div>
+</div>`
+hum.innerHTML=`<div>
+        <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Humidity</h5>
+    <p class="card-text">${humidity+"\u00B0"}</p>
+  </div>
+</div>`
+airP.innerHTML=`<div>
+        <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Air pressure</h5>
+    <p class="card-text">${air+"\u00B0"}</p>
+  </div>
+</div>`
+maxT.innerHTML=`<div>
+        <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">Max Temperature</h5>
+    <p class="card-text">${max+"\u00B0"}</p>
+  </div>
+</div>`
+    }
+
+function searchLocation(){
+    currentLocation();    
+}
+function currentLocation() {
+    navigator.geolocation.getCurrentPosition(success => {
+        lat = success.coords.latitude;
+        lon = success.coords.longitude;
+        fetchWeatherData(lat,lon);
+    });
+}
+
+function fetchWeatherData(lat, lon) {
+    try {
+        const apiKey = '5b4bee0ba241d092159faf007e166080';
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(ObjWeather=> displayWeather(ObjWeather))
+            .catch(error => console.error('Error fetching weather data:', error));
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+    }
+
+
+ 
+}
+    
+
+</script>
+</html>
